@@ -1,11 +1,4 @@
-name: Survival
+name: EmptyMiniGame
 version: '${project.version}'
-main: thor.survival.Survival
-api-version: '1.20'
-commands:
-  startsurvival:
-    description: start survival
-    usage: /<command>
-  survival:
-    description: a custom command to setup survival
-    usage: /<command>
+main: thor.emptyMiniGame.EmptyMiniGame
+api-version: '1.21'

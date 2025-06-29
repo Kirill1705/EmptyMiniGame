@@ -6,11 +6,10 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="Survival" />
+        <module name="EmptyMiniGame" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="Survival" target="1.8" />
       <module name="Survival (2)" target="1.5" />
     </bytecodeTargetLevel>
   </component>
