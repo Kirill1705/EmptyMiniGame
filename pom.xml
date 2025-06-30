@@ -4,16 +4,43 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>thor</groupId>
-    <artifactId>EmptyMiniGame</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <groupId>com.github.Kirill1705</groupId>
+    <artifactId>mini-game-loader</artifactId>
+    <version>1.1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>EmptyMiniGame</name>
+    <description>Library for PaperMC plugins</description>
+    <url>https://github.com/Kirill1705/EmptyMiniGame</url>
+
+    <!-- Добавлена информация о лицензии (обязательно для публикации) -->
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>https://opensource.org/licenses/MIT</url>
+        </license>
+    </licenses>
+
+    <!-- Добавлена информация о разработчике -->
+    <developers>
+        <developer>
+            <name>Kirill1705</name>
+        </developer>
+    </developers>
+
+    <!-- Добавлено управление SCM -->
+    <scm>
+        <connection>scm:git:git://github.com/Kirill1705/EmptyMiniGame.git</connection>
+        <developerConnection>scm:git:ssh://github.com/Kirill1705/EmptyMiniGame.git</developerConnection>
+        <url>https://github.com/Kirill1705/EmptyMiniGame</url>
+    </scm>
 
     <properties>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- Добавлена версия Maven для совместимости -->
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
     </properties>
 
     <build>
@@ -29,13 +56,54 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.4</version>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.6.0</version>
+                <configuration>
+                    <source>21</source>
+                    <!-- Явное указание на javadoc -->
+                    <javadocExecutable>/usr/lib/jvm/java-21-openjdk-amd64/bin/javadoc</javadocExecutable>
+                    <!-- Или полный путь -->
+                    <!-- <javadocExecutable>/usr/lib/jvm/java-21-openjdk-amd64/bin/javadoc</javadocExecutable> -->
+                </configuration>
                 <executions>
                     <execution>
-                        <phase>package</phase>
+                        <id>attach-javadocs</id>
                         <goals>
-                            <goal>shade</goal>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Изменён плагин для генерации JAR -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.3.0</version>
+            </plugin>
+
+            <!-- Добавлены плагины для публикации -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.3.0</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.6.0</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -48,6 +116,15 @@
             </resource>
         </resources>
     </build>
+
+    <!-- Добавлено управление публикацией -->
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub Packages</name>
+            <url>https://maven.pkg.github.com/Kirill1705/EmptyMiniGame</url>
+        </repository>
+    </distributionManagement>
 
     <repositories>
         <repository>

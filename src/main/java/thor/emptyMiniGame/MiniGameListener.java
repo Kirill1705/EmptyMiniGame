@@ -11,7 +11,7 @@ import org.bukkit.event.player.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-public class MiniGameListener implements Listener {
+class MiniGameListener implements Listener {
     MiniGameConfig config;
     MiniGameLoader loader;
     public MiniGameListener(MiniGameConfig config, MiniGameLoader loader) {
@@ -23,7 +23,7 @@ public class MiniGameListener implements Listener {
         Player player = event.getPlayer();
         Action action = event.getAction();
         ItemStack itemStack = event.getItem();
-        if (action.isRightClick()&&itemStack==config.startItem()) {
+        if (action.isRightClick()&&itemStack==config.getStartItem()) {
             loader.addPlayer(player);
         }
     }
@@ -58,7 +58,7 @@ public class MiniGameListener implements Listener {
         Location to = event.getTo();
         if (to==config.getLobby()&&from!=config.getLobby()) {
             Inventory inv = player.getInventory();
-            ItemStack itemStack = config.startItem();
+            ItemStack itemStack = config.getStartItem();
             if (!inv.contains(itemStack)) {
                 loader.giveItem(player);
             }

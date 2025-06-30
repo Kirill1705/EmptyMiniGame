@@ -10,6 +10,9 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.function.Supplier;
 
+/**
+ * Это основной класс библиотеки и есть загрузчик ваших мини игр. Обязательно создайте и сохраните 1 объект данного класса
+ */
 public class MiniGameLoader {
     private final MiniGameCreator factory;
     private final MiniGameConfig config;
@@ -28,14 +31,21 @@ public class MiniGameLoader {
         world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
         world.setDifficulty(config.getDifficulty());
     }
-    public MiniGameLoader(MiniGameCreator factory, Supplier<? extends MiniGameConfig> configCreator, Plugin plugin) {
+
+    /**
+     * В вашем плагине обязательно создать 1 экземпляр данного класса. Именно он будет вызывать методы в вашей мини игре. Именно этот загрузчик управляет всеми вашими минииграми на сервере
+     * @param factory Объект класса реализующего интерфейс фабрики мини игры. То есть он будет создавать объекты ваших мини игр
+     * @param config Объект конфигурации мини игры
+     * @param plugin Ваш плагин (ОсновнойКласс extends JavaPlugin
+     */
+    public MiniGameLoader(MiniGameCreator factory, MiniGameConfig config, Plugin plugin) {
         this.factory=factory;
-        this.config = configCreator.get();
+        this.config = config;
         this.plugin = plugin;
         plugin.getServer().getPluginManager().registerEvents(new MiniGameListener(config, this), plugin);
-        world = Bukkit.getWorld(config.name());
+        world = Bukkit.getWorld(config.getName());
         if (world==null) {
-            world = createGameWorld(config.name());
+            world = createGameWorld(config.getName());
         }
         setupWorld(world);
     }
@@ -49,7 +59,7 @@ public class MiniGameLoader {
                 continue;
             }
             int current = game.playersCount();
-            if (game.waitingForPlayers()&&current< config.maxPlayersCount()&&current>count) {
+            if (game.waitingForPlayers()&&current< config.getMaxPlayers()&&current>count) {
                 res = game;
                 count = game.playersCount();
             }
@@ -79,7 +89,7 @@ public class MiniGameLoader {
         return prev+1;
     }
     private String metaDataName() {
-        return config.name()+"qwerty";
+        return config.getName()+"qwerty";
     }
     private void addMetaData(Player player, MiniGame game) {
         player.setMetadata(metaDataName(), new FixedMetadataValue(plugin, game));
@@ -87,11 +97,24 @@ public class MiniGameLoader {
     }
     void giveItem(Player player) {
         Inventory inv = player.getInventory();
-        inv.addItem(config.startItem());
+        inv.addItem(config.getStartItem());
     }
+
+    /**
+     * Удаляет метаданные с игрока который покинул мини игру.
+     * Если в конфигурации вы используете autoRemovePlayerByDeath, то его этот метод можете не реализовывать
+     * @param player Игрок с которого надо удалить метаданные
+     */
     public void removePlayer(Player player) {
         player.removeMetadata(metaDataName(), plugin);
     }
+
+    /**
+     * Вернёт объект мини игры в которой участвует игрок
+     * @param player Игрок участвующий в мини игре
+     * @return Объект мини игры в которой находится игрок сейчас,
+     *         null если игрок сейчас не играет ни в одну вашу мини игру
+     */
     public MiniGame getPlayerMiniGame(Player player) {
         MiniGame game = null;
         if (player.hasMetadata(metaDataName())) {
